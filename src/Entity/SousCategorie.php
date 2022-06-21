@@ -16,6 +16,9 @@ class SousCategorie
     #[ORM\Column(type: 'string', length: 255)]
     private $libelle;
 
+    #[ORM\ManyToOne(targetEntity: Categorie::class, inversedBy:'sousCategories')] 
+    private $categorie;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -31,5 +34,10 @@ class SousCategorie
         $this->libelle = $libelle;
 
         return $this;
+    }
+
+    public function getCategorie(): Object
+    {
+        return $this->categorie;
     }
 }

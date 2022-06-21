@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\AdresseRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: AdresseRepository::class)]
 class Adresse
@@ -14,20 +16,40 @@ class Adresse
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $ville;
-
-    #[ORM\Column(type: 'integer')]
     private $rue;
 
     #[ORM\Column(type: 'string', length: 255)]
+    private $ville;
+
+    #[ORM\Column(type: 'integer')]
     private $codePostal;
 
     #[ORM\Column(type: 'integer')]
     private $numMaison;
+    
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy:'adresses')] 
+    private $user;
+
+    public function __construct ()
+    {
+        $this->adresses = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getRue(): ?string
+    {
+        return $this->rue;
+    }
+
+    public function setRue(string $rue): self
+    {
+        $this->rue = $rue;
+
+        return $this;
     }
 
     public function getVille(): ?string
@@ -42,24 +64,12 @@ class Adresse
         return $this;
     }
 
-    public function getRue(): ?int
-    {
-        return $this->rue;
-    }
-
-    public function setRue(int $rue): self
-    {
-        $this->rue = $rue;
-
-        return $this;
-    }
-
-    public function getCodePostal(): ?string
+    public function getCodePostal(): ?int
     {
         return $this->codePostal;
     }
 
-    public function setCodePostal(string $codePostal): self
+    public function setCodePostal(int $codePostal): self
     {
         $this->codePostal = $codePostal;
 
@@ -77,4 +87,9 @@ class Adresse
 
         return $this;
     }
+
+    public function getUser(): Object
+    {
+        return $this->user;
+    } 
 }

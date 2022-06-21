@@ -4,9 +4,11 @@ namespace App\Entity;
 
 use App\Repository\ImageRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: ImageRepository::class)]
-class Image
+class Image 
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -14,22 +16,35 @@ class Image
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $imageURL;
+    private $imageUrl;
+
+    #[ORM\ManyToOne(targetEntity: Article::class, inversedBy:'images')] 
+    private $article;
+
+    public function __construct ()
+    {
+        $this->images = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getImageURL(): ?string
+    public function getImageUrl(): ?string
     {
-        return $this->imageURL;
+        return $this->imageUrl;
     }
 
-    public function setImageURL(string $imageURL): self
+    public function setImageUrl(string $imageUrl): self
     {
-        $this->imageURL = $imageURL;
+        $this->imageUrl = $imageUrl;
 
         return $this;
+    }
+
+    public function getArticle(): Object
+    {
+        return $this->article;
     }
 }

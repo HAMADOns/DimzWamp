@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -16,7 +18,7 @@ class Article
     #[ORM\Column(type: 'string', length: 255)]
     private $libelle;
 
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column(type: 'string', length: 255)]
     private $description;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -28,7 +30,7 @@ class Article
     #[ORM\Column(type: 'boolean')]
     private $etat;
 
-    #[ORM\Column(type: 'decimal', precision: 10, scale: '0')]
+    #[ORM\Column(type: 'decimal', precision: 10, scale: '0')]  
     private $prixAchat;
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: '0')]
@@ -39,6 +41,23 @@ class Article
 
     #[ORM\Column(type: 'datetime')]
     private $dateAjout;
+
+    #[ORM\ManyToMany(targetEntity: Commande::class, inversedBy:'articles')]
+    private $commandes;
+    
+    #[ORM\ManyToOne(targetEntity: Marque::class, inversedBy:'articles')] 
+    private $marque;
+
+    #[ORM\ManyToOne(targetEntity: Categorie::class, inversedBy:'articles')] 
+    private $categorie;
+
+    #[ORM\OneToMany(targetEntity: Image::class, mappedBy:'article')] 
+    private $images;
+
+    public function __construct ()
+    {
+        $this->articles = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -52,7 +71,7 @@ class Article
 
     public function setLibelle(string $libelle): self
     {
-        $this->libelle = $libelle;
+        $this->libelle = $libelle; 
 
         return $this;
     }
@@ -152,4 +171,24 @@ class Article
 
         return $this;
     }
+
+    public function getCommandes(): Collection
+    {
+        return $this->commandes;
+    } 
+
+    public function getMarque(): Object
+    {
+        return $this->marque;
+    } 
+
+    public function getCategorie(): Object
+    {
+        return $this->categorie;
+    } 
+
+    public function getImages(): Collection
+    {
+        return $this->images;
+    } 
 }
